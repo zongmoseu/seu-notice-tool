@@ -2,8 +2,11 @@
   "week_state": {
     "2026-05-25": {
       "baseline_done": true,
-      "baseline_urls": [],
-      "baseline_at": "2026-05-28T22:47:31"
+      "baseline_urls": [
+        "https://jwc.seu.edu.cn/2026/0522/c21681a568583/page.htm",
+        "https://jwc.seu.edu.cn/2026/0526/c21681a568889/page.htm"
+      ],
+      "baseline_at": "2026-05-28T22:55:06"
     }
   },
   "blocks": [

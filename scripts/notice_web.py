@@ -508,28 +508,45 @@ def polish_pending_lectures() -> int:
 
 def archived_records(category: str) -> list[dict[str, Any]]:
     rows = []
+    used_draft_paths: set[str] = set()
+    blocked_lecture_urls = source_urls_in_lecture_blocks(load_lecture_store()) if category == "lecture" else set()
     for url, record in seen_by_url().items():
         if record.get("category") != category or record.get("status") != "archived":
             continue
+        if category == "lecture" and url in blocked_lecture_urls:
+            continue
         draft_path = record.get("draft_path")
         if draft_path and (ROOT / draft_path).exists():
-            continue
-        body = archived_body(record, url)
+            normalized_draft_path = str(Path(draft_path))
+            if normalized_draft_path in used_draft_paths:
+                continue
+            used_draft_paths.add(normalized_draft_path)
+            meta, body = read_draft(ROOT / draft_path)
+            urls = tool.source_urls_from_meta(meta) or [url]
+            title = meta.get("title", record.get("title", ""))
+            publish_date = meta.get("publish_date", record.get("publish_date", ""))
+            sent_date = meta.get("sent_date", record.get("sent_date", ""))
+        else:
+            body = archived_body(record, url)
+            urls = [url]
+            title = record.get("title", "")
+            publish_date = record.get("publish_date", "")
+            sent_date = record.get("sent_date", "")
         rows.append(
             {
                 "id": url,
                 "meta": {
-                    "title": record.get("title", ""),
-                    "publish_date": record.get("publish_date", ""),
+                    "title": title,
+                    "publish_date": publish_date,
                 },
                 "body": body,
                 "body_html": render_body_html(body),
-                "urls": [url],
+                "urls": urls,
                 "status": "archived",
                 "highlight": False,
                 "change_type": "",
-                "publish_date": record.get("publish_date", ""),
-                "sent_date": record.get("sent_date", ""),
+                "publish_date": publish_date,
+                "sent_date": sent_date,
                 "copy_label": "复制文案",
             }
         )
@@ -546,8 +563,13 @@ def competition_archived_blocks() -> list[dict[str, Any]]:
     records = archived_records("competition")
     records.sort(key=lambda item: (item.get("publish_date", ""), item["meta"].get("title", "")), reverse=True)
     blocks: list[dict[str, Any]] = []
+    bundled_records = [
+        item for item in records if len(item.get("urls", [])) > 1 or item["body"].startswith("「健雄科协」竞赛通知")
+    ]
+    single_records = [item for item in records if item not in bundled_records]
+    blocks.extend(bundled_records)
     by_month: dict[str, list[dict[str, Any]]] = {}
-    for record in records:
+    for record in single_records:
         by_month.setdefault(month_label(record.get("publish_date", "")), []).append(record)
     for month, month_records in by_month.items():
         for index in range(0, len(month_records), 2):
@@ -802,6 +824,12 @@ def archive_draft_in_place(draft_id: str, sent_date: str) -> dict[str, Any]:
     meta["archive_path"] = str(archive_path.relative_to(ROOT))
     meta["highlight"] = "false"
     path.write_text(tool.render_frontmatter(meta) + body.strip() + "\n", encoding="utf-8")
+    backup_dir = ROOT / tool.ARCHIVED_DRAFT_DIR / sent_date / tool.section_title(category)
+    backup_dir.mkdir(parents=True, exist_ok=True)
+    target = backup_dir / path.name
+    if target.exists():
+        target = backup_dir / f"{path.stem}_{dt.datetime.now().strftime('%H%M%S')}.md"
+    shutil.move(str(path), str(target))
 
     seen = tool.load_seen(ROOT)
     items = seen.setdefault("items", {})
@@ -817,13 +845,17 @@ def archive_draft_in_place(draft_id: str, sent_date: str) -> dict[str, Any]:
                 "status": "archived",
                 "sent_date": sent_date,
                 "archive_path": str(archive_path.relative_to(ROOT)),
-                "draft_path": str(path.relative_to(ROOT)),
+                "draft_path": str(target.relative_to(ROOT)),
                 "highlight": False,
                 "updated_at": dt.datetime.now().isoformat(timespec="seconds"),
             }
         )
     tool.save_seen(ROOT, seen)
-    return {"archived": len(urls), "archive_path": str(archive_path.relative_to(ROOT)), "kept_path": str(path.relative_to(ROOT))}
+    return {
+        "archived": len(urls),
+        "archive_path": str(archive_path.relative_to(ROOT)),
+        "kept_path": str(target.relative_to(ROOT)),
+    }
 
 
 @app.get("/")
