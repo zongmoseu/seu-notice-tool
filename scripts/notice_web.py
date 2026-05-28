@@ -457,8 +457,14 @@ def pending_drafts(category: str) -> list[dict[str, Any]]:
         elif category == "competition" and not body.lstrip().startswith("「健雄科协」竞赛通知"):
             body = "「健雄科协」竞赛通知\n" + body.strip()
         row_records = [records.get(url, {}) for url in urls]
-        highlight = any(record.get("highlight") for record in row_records) or any(
-            record.get("change_type") == "updated" for record in row_records
+        status = meta.get("status", "drafted")
+        if status not in ("archived", "expired") and row_records and all(
+            record.get("status") == "archived" for record in row_records
+        ):
+            status = "archived"
+        highlight = status == "drafted" and (
+            any(record.get("highlight") for record in row_records)
+            or any(record.get("change_type") == "updated" for record in row_records)
         )
         change_type = "updated" if any(record.get("change_type") == "updated" for record in row_records) else "new"
         rows.append(
@@ -469,10 +475,14 @@ def pending_drafts(category: str) -> list[dict[str, Any]]:
                 "body": body.strip(),
                 "body_html": render_body_html(body.strip()),
                 "urls": urls,
-                "status": "drafted",
+                "status": status,
                 "highlight": highlight,
                 "change_type": change_type,
                 "publish_date": meta.get("publish_date", ""),
+                "sent_date": meta.get("sent_date", "") or next(
+                    (record.get("sent_date", "") for record in row_records if record.get("sent_date")),
+                    "",
+                ),
                 "copy_label": "复制文案",
             }
         )
@@ -500,6 +510,9 @@ def archived_records(category: str) -> list[dict[str, Any]]:
     rows = []
     for url, record in seen_by_url().items():
         if record.get("category") != category or record.get("status") != "archived":
+            continue
+        draft_path = record.get("draft_path")
+        if draft_path and (ROOT / draft_path).exists():
             continue
         body = archived_body(record, url)
         rows.append(
@@ -769,6 +782,50 @@ def archive_lecture_block(block_id: str, sent_date: str) -> dict[str, Any]:
     return {"archived": len(block.get("source_urls", [])), "archive_path": str(archive_path.relative_to(ROOT))}
 
 
+def archive_draft_in_place(draft_id: str, sent_date: str) -> dict[str, Any]:
+    path = ROOT / Path(draft_id)
+    try:
+        resolved = path.resolve()
+        if ROOT.resolve() not in resolved.parents or not path.exists() or not path.is_file():
+            raise ValueError("draft path is outside project or missing")
+    except OSError as exc:
+        raise ValueError(str(exc)) from exc
+
+    meta, body = read_draft(path)
+    category = meta.get("category")
+    if category not in ("competition", "lecture"):
+        raise ValueError(f"unknown draft category: {category}")
+
+    archive_path = append_archive_body(category, body, sent_date)
+    meta["status"] = "archived"
+    meta["sent_date"] = sent_date
+    meta["archive_path"] = str(archive_path.relative_to(ROOT))
+    meta["highlight"] = "false"
+    path.write_text(tool.render_frontmatter(meta) + body.strip() + "\n", encoding="utf-8")
+
+    seen = tool.load_seen(ROOT)
+    items = seen.setdefault("items", {})
+    urls = tool.source_urls_from_meta(meta)
+    for url in urls:
+        normalized = tool.normalize_url(url)
+        record = items.setdefault(normalized, {})
+        record.update(
+            {
+                "title": record.get("title") or meta.get("title", ""),
+                "category": category,
+                "publish_date": record.get("publish_date") or meta.get("publish_date", ""),
+                "status": "archived",
+                "sent_date": sent_date,
+                "archive_path": str(archive_path.relative_to(ROOT)),
+                "draft_path": str(path.relative_to(ROOT)),
+                "highlight": False,
+                "updated_at": dt.datetime.now().isoformat(timespec="seconds"),
+            }
+        )
+    tool.save_seen(ROOT, seen)
+    return {"archived": len(urls), "archive_path": str(archive_path.relative_to(ROOT)), "kept_path": str(path.relative_to(ROOT))}
+
+
 @app.get("/")
 def index():
     return redirect(url_for("competition_page"))
@@ -835,7 +892,7 @@ def archive():
         if str(draft_id).startswith("block:"):
             result = archive_lecture_block(str(draft_id), sent_date)
         else:
-            result = tool.archive_draft_path(ROOT, Path(draft_id), sent_date)
+            result = archive_draft_in_place(str(draft_id), sent_date)
     except Exception as exc:
         return jsonify({"ok": False, "error": str(exc)}), 400
     return jsonify({"ok": True, **result})

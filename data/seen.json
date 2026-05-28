@@ -4,19 +4,25 @@
       "title": "5月30日课外研学讲座预告",
       "category": "lecture",
       "publish_date": "2026-05-26",
-      "status": "drafted",
+      "status": "archived",
       "draft_path": "待发\\研学讲座通知\\2026-05-26_568889_5月30日课外研学讲座预告.md",
       "source_url": "https://jwc.seu.edu.cn/2026/0526/c21681a568889/page.htm",
-      "updated_at": "2026-05-28T17:53:17"
+      "updated_at": "2026-05-28T22:47:20",
+      "sent_date": "2026-05-28",
+      "archive_path": "已发\\2026-05-28.md",
+      "highlight": false
     },
     "https://jwc.seu.edu.cn/2026/0522/c21681a568583/page.htm": {
       "title": "第十三周课外研学讲座预告（5.25更新）",
       "category": "lecture",
       "publish_date": "2026-05-22",
-      "status": "drafted",
+      "status": "archived",
       "draft_path": "待发\\研学讲座通知\\2026-05-22_568583_第十三周课外研学讲座预告（5.25更新）.md",
       "source_url": "https://jwc.seu.edu.cn/2026/0522/c21681a568583/page.htm",
-      "updated_at": "2026-05-28T17:53:18"
+      "updated_at": "2026-05-28T22:47:13",
+      "sent_date": "2026-05-28",
+      "archive_path": "已发\\2026-05-28.md",
+      "highlight": false
     },
     "https://jwc.seu.edu.cn/2026/0514/c21681a567755/page.htm": {
       "title": "关于举办东南大学第十届电子装配竞赛的通知",
