@@ -923,6 +923,10 @@ TEMPLATE = r"""
               <button onclick="copyText({{ row.body|tojson }})">{{ row.copy_label or '复制文案' }}</button>
               {% if row.status not in ['archived', 'expired'] %}
               <button onclick="archiveDraft({{ row.id|tojson }})">标记已发并归档</button>
+              {% elif row.status == 'archived' %}
+              <button disabled>已归档</button>
+              {% elif row.status == 'expired' %}
+              <button disabled>已过期</button>
               {% endif %}
             </div>
           </div>
