@@ -29,10 +29,10 @@ http://127.0.0.1:8765
 ```env
 API_URL=https://your-api-provider.example
 API_KEY=replace-with-your-key
-MODEL=gpt-5.5
+MODEL=deepseek-v4-flash
 ```
 
-`API_URL` 可以是根地址，也可以是 OpenAI 兼容的 `/v1` 地址；程序会自动补齐 `/chat/completions`。`.env` 已写入 `.gitignore`，不要公开分享。
+`API_URL` 可以是根地址，也可以是 OpenAI 兼容的 `/v1` 地址；程序会自动补齐 `/chat/completions`。`MODEL` 不固定，填服务商支持的模型名即可，例如 `deepseek-v4-flash`、`deepseek-v4-pro`、`qwen-plus`、`glm-4-flash` 等。`.env` 已写入 `.gitignore`，不要公开分享。
 
 ## 免责声明
 
