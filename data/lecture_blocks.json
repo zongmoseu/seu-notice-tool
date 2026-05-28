@@ -1,0 +1,41 @@
+{
+  "week_state": {
+    "2026-05-25": {
+      "baseline_done": true,
+      "baseline_urls": [
+        "https://jwc.seu.edu.cn/2026/0522/c21681a568583/page.htm",
+        "https://jwc.seu.edu.cn/2026/0526/c21681a568889/page.htm"
+      ],
+      "baseline_at": "2026-05-28T22:22:24"
+    }
+  },
+  "blocks": [
+    {
+      "id": "lecture-new-20260528-214446",
+      "mode": "midweek_new",
+      "week_start": "2026-05-25",
+      "week_label": "第十三周（05.25-05.31）",
+      "status": "drafted",
+      "highlight": true,
+      "source_urls": [
+        "https://jwc.seu.edu.cn/2026/0526/c21681a568889/page.htm"
+      ],
+      "items": [
+        {
+          "title": "讲座题目【待核对】",
+          "fields": [
+            "【时间】5月30日 周六 上午09:00",
+            "【地点】九龙湖 大学生活动中心 一楼圆形报告厅",
+            "【预约】无需提前预约",
+            "【QQ群】校学生科协SRTP交流群：343075372、814703425、607347124"
+          ],
+          "source_url": "https://jwc.seu.edu.cn/2026/0526/c21681a568889/page.htm",
+          "event_at": "2026-05-30T09:00:00"
+        }
+      ],
+      "body": "[健雄科协] 研学讲座\n\n本周新增1场课外研学讲座，欢迎各位同学参与！\n\n讲座题目【待核对】\n【时间】5月30日 周六 上午09:00\n【地点】九龙湖 大学生活动中心 一楼圆形报告厅\n【预约】无需提前预约\n【QQ群】校学生科协SRTP交流群：343075372、814703425、607347124\n\n详见：\nhttps://jwc.seu.edu.cn/2026/0526/c21681a568889/page.htm\n\n【注】关于SRTP讲座参与方式、讲座论文提交方式等事项，可参考讲座预告网页的 pdf 附件《本科生课外研学讲座活动指南(2026版)》。",
+      "created_at": "2026-05-28T21:44:46",
+      "updated_at": "2026-05-28T21:44:46"
+    }
+  ]
+}

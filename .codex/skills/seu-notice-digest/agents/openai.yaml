@@ -1,0 +1,7 @@
+interface:
+  display_name: "SEU Notice Digest"
+  short_description: "Scrape SEU JWC notices into 健雄科协 Markdown drafts."
+  default_prompt: "Use $seu-notice-digest to fetch, review, or archive Southeast University competition and 研学讲座 notices."
+
+policy:
+  allow_implicit_invocation: true

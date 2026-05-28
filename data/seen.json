@@ -1,0 +1,61 @@
+{
+  "items": {
+    "https://jwc.seu.edu.cn/2026/0526/c21681a568889/page.htm": {
+      "title": "5月30日课外研学讲座预告",
+      "category": "lecture",
+      "publish_date": "2026-05-26",
+      "status": "drafted",
+      "draft_path": "待发\\研学讲座通知\\2026-05-26_568889_5月30日课外研学讲座预告.md",
+      "source_url": "https://jwc.seu.edu.cn/2026/0526/c21681a568889/page.htm",
+      "updated_at": "2026-05-28T17:53:17"
+    },
+    "https://jwc.seu.edu.cn/2026/0522/c21681a568583/page.htm": {
+      "title": "第十三周课外研学讲座预告（5.25更新）",
+      "category": "lecture",
+      "publish_date": "2026-05-22",
+      "status": "drafted",
+      "draft_path": "待发\\研学讲座通知\\2026-05-22_568583_第十三周课外研学讲座预告（5.25更新）.md",
+      "source_url": "https://jwc.seu.edu.cn/2026/0522/c21681a568583/page.htm",
+      "updated_at": "2026-05-28T17:53:18"
+    },
+    "https://jwc.seu.edu.cn/2026/0514/c21681a567755/page.htm": {
+      "title": "关于举办东南大学第十届电子装配竞赛的通知",
+      "category": "competition",
+      "publish_date": "2026-05-14",
+      "status": "archived",
+      "draft_path": "",
+      "source_url": "https://jwc.seu.edu.cn/2026/0514/c21681a567755/page.htm",
+      "highlight": false,
+      "change_type": "new",
+      "updated_at": "2026-05-28T21:24:45",
+      "sent_date": "2026-05-28",
+      "archive_path": "已发\\2026-05-28.md"
+    },
+    "https://jwc.seu.edu.cn/2026/0424/c21681a565642/page.htm": {
+      "title": "关于举办东南大学第二十二届大学生程序设计大赛的通知",
+      "category": "competition",
+      "publish_date": "2026-04-24",
+      "status": "archived",
+      "draft_path": "",
+      "source_url": "https://jwc.seu.edu.cn/2026/0424/c21681a565642/page.htm",
+      "highlight": false,
+      "change_type": "new",
+      "updated_at": "2026-05-28T21:24:45",
+      "sent_date": "2026-05-28",
+      "archive_path": "已发\\2026-05-28.md"
+    },
+    "https://jwc.seu.edu.cn/2026/0422/c21681a564848/page.htm": {
+      "title": "关于 2026 高教社杯全国大学生数学建模竞赛报名的通知",
+      "category": "competition",
+      "publish_date": "2026-04-22",
+      "status": "archived",
+      "draft_path": "",
+      "source_url": "https://jwc.seu.edu.cn/2026/0422/c21681a564848/page.htm",
+      "highlight": false,
+      "change_type": "new",
+      "updated_at": "2026-05-28T21:24:45",
+      "sent_date": "2026-05-28",
+      "archive_path": "已发\\2026-05-28.md"
+    }
+  }
+}
