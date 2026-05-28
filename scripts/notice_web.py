@@ -920,9 +920,9 @@ TEMPLATE = r"""
             {% if row.sent_date %}<div>发送日期：{{ row.sent_date }}</div>{% endif %}
             <div>链接数：{{ row.urls|length }}</div>
             <div class="actions">
-              <button onclick="copyText({{ row.body|tojson }})">{{ row.copy_label or '复制文案' }}</button>
+              <button data-body="{{ row.body|tojson|forceescape }}" onclick="copyText(JSON.parse(this.dataset.body))">{{ row.copy_label or '复制文案' }}</button>
               {% if row.status not in ['archived', 'expired'] %}
-              <button onclick="archiveDraft({{ row.id|tojson }})">标记已发并归档</button>
+              <button data-id="{{ row.id|tojson|forceescape }}" onclick="archiveDraft(JSON.parse(this.dataset.id))">标记已发并归档</button>
               {% elif row.status == 'archived' %}
               <button disabled>已归档</button>
               {% elif row.status == 'expired' %}
@@ -959,7 +959,19 @@ TEMPLATE = r"""
       location.reload();
     }
     async function copyText(text) {
-      await navigator.clipboard.writeText(text);
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (error) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.left = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        document.execCommand('copy');
+        textarea.remove();
+      }
       const message = document.getElementById('message');
       message.textContent = '已复制';
       setTimeout(() => message.textContent = '', 1200);
