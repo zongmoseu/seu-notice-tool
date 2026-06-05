@@ -739,7 +739,8 @@ def update_notices(
     ensure_structure(root)
     seen = load_seen(root)
     created = skipped = updated = skipped_old = 0
-    cutoff = since_date or (dt.date.today() - dt.timedelta(days=days))
+    use_date_window = since_date is not None or days >= 0
+    cutoff = since_date or (dt.date.today() - dt.timedelta(days=max(days, 0)))
 
     for page in range(1, max(1, max_pages) + 1):
         summaries, page_dates = parse_list_page_with_dates(page)
@@ -760,7 +761,7 @@ def update_notices(
                 parsed_dates.append(dt.date.fromisoformat(value))
             except ValueError:
                 pass
-        if parsed_dates and min(parsed_dates) < cutoff:
+        if use_date_window and parsed_dates and min(parsed_dates) < cutoff:
             break
 
     save_seen(root, seen)

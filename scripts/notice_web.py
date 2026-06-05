@@ -877,7 +877,8 @@ def lectures_page():
 def update_kind(kind: str):
     if kind not in ("competition", "lecture"):
         return jsonify({"ok": False, "error": "unknown kind"}), 400
-    since_date = current_week_start() if kind == "lecture" else None
+    since_date = None
+    days = -1 if kind == "lecture" else tool.DEFAULT_RECENT_DAYS
     baseline_done = False
     if kind == "lecture":
         store = load_lecture_store()
@@ -887,7 +888,7 @@ def update_kind(kind: str):
     result = tool.update_notices(
         ROOT,
         category=kind,
-        days=tool.DEFAULT_RECENT_DAYS,
+        days=days,
         max_pages=5,
         use_ai=False,
         since_date=since_date,

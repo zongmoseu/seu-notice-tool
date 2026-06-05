@@ -57,7 +57,7 @@ Competition notices:
 
 Lecture notices:
 
-- Lecture updates scan from the current system week Monday, not a rolling 7-day window.
+- Lecture updates scan official lecture URLs from the list pages and deduplicate by normalized URL plus title and publish date. Do not filter lectures by "published this week"; SEU often publishes a current-week preview in the previous week.
 - Every week’s first lecture update is the baseline weekly preview and should use “本周有 X 场课外研学讲座”.
 - Later updates in the same week only produce a separate “周中新增” block when new/updated notices appear.
 - If a midweek-new block is not sent, later new lectures merge into that same block.
